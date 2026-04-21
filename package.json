@@ -1,0 +1,21 @@
+{
+  "name": "spotify-cli",
+  "version": "0.1.0",
+  "description": "Zero-dependency Spotify CLI using PKCE OAuth. Direct Web API, no third-party hosts.",
+  "type": "module",
+  "bin": {
+    "spotify": "./bin/spotify.js"
+  },
+  "scripts": {
+    "start": "node bin/spotify.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {},
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/asaeed/spotify-cli.git"
+  }
+}
