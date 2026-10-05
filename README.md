@@ -75,3 +75,14 @@ If an endpoint breaks on a future API change, patch the relevant file under `src
 ## License
 
 MIT
+
+
+## Complete artist imports and automation
+
+`spotify top artists --time_range long_term --limit 100000` exhausts available ranking pages. `--limit` now controls the total requested; each API request uses at most 50 items. The same paging applies to top tracks.
+
+Track results keep the existing `artists` array of names and add `artist_details` containing artist IDs and names. This lets concerts-cli retain identities and spelling aliases across daily imports.
+
+Large JSON envelopes finish draining stdout before the CLI exits, so pipe consumers receive complete results. This fixes intermittent parse failures for large liked-song and ranking imports. OAuth credentials remain local under `~/.config/spotify-cli` and are not part of concerts-cli's GitHub data backup.
+
+Run regression checks with `npm test`.

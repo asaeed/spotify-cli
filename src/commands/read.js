@@ -6,6 +6,7 @@ const trackBrief = (t) => t && ({
   uri: t.uri,
   name: t.name,
   artists: (t.artists ?? []).map(a => a.name),
+  artist_details: (t.artists ?? []).map(a => ({ id: a.id, name: a.name })),
   album: t.album?.name,
   duration_ms: t.duration_ms,
   popularity: t.popularity,
@@ -81,8 +82,9 @@ export async function cmdTop(kind, { time_range, limit }) {
   if (!['tracks', 'artists'].includes(kind)) throw new Error('bad_input:top kind must be tracks|artists');
   const tr = time_range ?? 'medium_term';
   const lim = Number(limit ?? 20);
-  const data = await get(`/me/top/${kind}`, { query: { time_range: tr, limit: lim } });
-  const items = (data.items ?? []).map(kind === 'tracks' ? trackBrief : artistBrief);
+  if (!Number.isInteger(lim) || lim < 1) throw new Error('bad_input:limit must be a positive integer');
+  const data = await paginate(`/me/top/${kind}`, { query: { time_range: tr, limit: Math.min(50, lim) } }, lim);
+  const items = data.map(kind === 'tracks' ? trackBrief : artistBrief);
   ok({ kind, time_range: tr, count: items.length, items });
 }
 
