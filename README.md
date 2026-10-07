@@ -4,7 +4,7 @@ A zero-dependency Spotify CLI for use from the terminal or AI coding agents (Cla
 
 Runs on Node 20+ (for native `fetch` and Web Crypto). No `node_modules`.
 
-For Concert Radar integration, use the [fresh-machine quickstart](https://github.com/asaeed/concerts-cli/blob/feat/persistent-concert-data/docs/quickstart.md). Complete ranking imports are currently on `fix/complete-watchlist-imports`; clone that branch for the dashboard.
+For Concert Radar integration, use the [fresh-machine quickstart](https://github.com/asaeed/concerts-cli/blob/main/docs/quickstart.md). Complete ranking imports are available on `main`.
 
 ## Install (macOS / Linux)
 
@@ -34,6 +34,21 @@ Ensure `~/.local/bin` is on your `$PATH`.
 Config and tokens are stored at `~/.config/spotify-cli/` with `0600` permissions. PKCE is used — no client secret needed.
 
 Override the config directory with `SPOTIFY_CLI_DIR=/custom/path`.
+
+## Use with Concert Radar
+
+After installing both repositories and authorizing your own Spotify account:
+
+```sh
+concerts favorite sync
+# From the concerts-cli checkout, after adding a region:
+./run-digest.sh --no-post
+node web/server.js
+```
+
+Open <http://localhost:8737/>. The concert dashboard saves artist rankings and a durable watchlist locally. Each person starts with their own data; no access to someone else's recovery repo is needed. Teams delivery and GitHub recovery backups are optional. See the [concerts-cli README](https://github.com/asaeed/concerts-cli#concert-radar-quick-setup) for city setup, manual favorites and persistent macOS hosting.
+
+To contribute, fork this repository and open a pull request against `main`. OAuth tokens and local configurations stay outside Git; never copy another user's credentials.
 
 ## Auth flow
 
