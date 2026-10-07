@@ -4,6 +4,8 @@ A zero-dependency Spotify CLI for use from the terminal or AI coding agents (Cla
 
 Runs on Node 20+ (for native `fetch` and Web Crypto). No `node_modules`.
 
+For Concert Radar integration, use the [fresh-machine quickstart](https://github.com/asaeed/concerts-cli/blob/main/docs/quickstart.md). Complete ranking imports are available on `main`.
+
 ## Install (macOS / Linux)
 
 ```bash
@@ -32,6 +34,21 @@ Ensure `~/.local/bin` is on your `$PATH`.
 Config and tokens are stored at `~/.config/spotify-cli/` with `0600` permissions. PKCE is used — no client secret needed.
 
 Override the config directory with `SPOTIFY_CLI_DIR=/custom/path`.
+
+## Use with Concert Radar
+
+After installing both repositories and authorizing your own Spotify account:
+
+```sh
+concerts favorite sync
+# From the concerts-cli checkout, after adding a region:
+./run-digest.sh --no-post
+node web/server.js
+```
+
+Open <http://localhost:8737/>. The concert dashboard saves artist rankings and a durable watchlist locally. Each person starts with their own data; no access to someone else's recovery repo is needed. Teams delivery and GitHub recovery backups are optional. See the [concerts-cli README](https://github.com/asaeed/concerts-cli#concert-radar-quick-setup) for city setup, manual favorites and persistent macOS hosting.
+
+To contribute, fork this repository and open a pull request against `main`. OAuth tokens and local configurations stay outside Git; never copy another user's credentials.
 
 ## Auth flow
 
@@ -75,3 +92,14 @@ If an endpoint breaks on a future API change, patch the relevant file under `src
 ## License
 
 MIT
+
+
+## Complete artist imports and automation
+
+`spotify top artists --time_range long_term --limit 100000` exhausts available ranking pages. `--limit` now controls the total requested; each API request uses at most 50 items. The same paging applies to top tracks.
+
+Track results keep the existing `artists` array of names and add `artist_details` containing artist IDs and names. This lets concerts-cli retain identities and spelling aliases across daily imports.
+
+Large JSON envelopes finish draining stdout before the CLI exits, so pipe consumers receive complete results. This fixes intermittent parse failures for large liked-song and ranking imports. OAuth credentials remain local under `~/.config/spotify-cli` and are not part of concerts-cli's GitHub data backup.
+
+Run regression checks with `npm test`.

@@ -3,3 +3,11 @@ node_modules/
 *.log
 .env
 .env.local
+
+# Local credentials and machine settings stay out of Git.
+.env.*
+secrets.json
+tokens.json
+config.local.json
+__pycache__/
+*.pyc

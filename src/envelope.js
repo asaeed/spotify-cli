@@ -7,24 +7,21 @@ export const EXIT = {
   RATE_LIMIT: 5,
 };
 
+function emit(envelope, code) {
+  // Large JSON responses must finish draining a pipe before process exit.
+  process.stdout.write(JSON.stringify(envelope) + '\n', () => process.exit(code));
+}
+
 export function ok(data) {
-  process.stdout.write(JSON.stringify({ status: 'ok', data, error: null }) + '\n');
-  process.exit(EXIT.OK);
+  emit({ status: 'ok', data, error: null }, EXIT.OK);
 }
 
 export function fail(code, message, hint) {
-  process.stdout.write(
-    JSON.stringify({
-      status: 'error',
-      data: null,
-      error: { code, message, ...(hint ? { hint } : {}) },
-    }) + '\n'
-  );
   const exit =
     code === 'not_authenticated' ? EXIT.NOT_AUTH :
     code === 'bad_input' ? EXIT.BAD_INPUT :
     code === 'rate_limited' ? EXIT.RATE_LIMIT :
     code === 'network_error' ? EXIT.NETWORK :
     EXIT.GENERIC;
-  process.exit(exit);
+  emit({status: 'error', data: null, error: {code, message, ...(hint ? {hint} : {})}}, exit);
 }
