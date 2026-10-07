@@ -4,6 +4,8 @@ A zero-dependency Spotify CLI for use from the terminal or AI coding agents (Cla
 
 Runs on Node 20+ (for native `fetch` and Web Crypto). No `node_modules`.
 
+For Concert Radar integration, use the [fresh-machine quickstart](https://github.com/asaeed/concerts-cli/blob/feat/persistent-concert-data/docs/quickstart.md). Complete ranking imports are currently on `fix/complete-watchlist-imports`; clone that branch for the dashboard.
+
 ## Install (macOS / Linux)
 
 ```bash
