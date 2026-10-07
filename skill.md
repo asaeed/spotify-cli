@@ -89,3 +89,5 @@ On error: `status: "error"`, `error: {code, message, hint?}`.
 
 
 `top --limit N` is the total requested across pages, not the API page size. Use `--limit 100000` to exhaust available rankings. The API is requested in pages of at most 50. Track outputs retain `artists` as names and add `artist_details` with artist IDs for durable identity matching.
+
+`spotify followed [--limit N]` returns all followed artists by default, using cursor pagination and `user-follow-read`.

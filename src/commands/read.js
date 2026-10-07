@@ -78,6 +78,24 @@ export async function cmdSaved({ limit }) {
   });
 }
 
+export async function cmdFollowed({ limit } = {}) {
+  const max = Number(limit ?? 100000);
+  if (!Number.isInteger(max) || max < 1) throw new Error('bad_input:limit must be a positive integer');
+  const artists = [];
+  let after;
+  const cursors = new Set();
+  while (artists.length < max) {
+    const page = await get('/me/following', { query: { type: 'artist', limit: Math.min(50, max - artists.length), after } });
+    const group = page?.artists || {};
+    const batch = group.items || [];
+    artists.push(...batch);
+    const next = group.cursors?.after;
+    if (!group.next || !batch.length || !next || cursors.has(next)) break;
+    cursors.add(next); after = next;
+  }
+  ok({ count: artists.length, artists: artists.map(artistBrief) });
+}
+
 export async function cmdTop(kind, { time_range, limit }) {
   if (!['tracks', 'artists'].includes(kind)) throw new Error('bad_input:top kind must be tracks|artists');
   const tr = time_range ?? 'medium_term';

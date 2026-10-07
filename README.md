@@ -103,3 +103,5 @@ Track results keep the existing `artists` array of names and add `artist_details
 Large JSON envelopes finish draining stdout before the CLI exits, so pipe consumers receive complete results. This fixes intermittent parse failures for large liked-song and ranking imports. OAuth credentials remain local under `~/.config/spotify-cli` and are not part of concerts-cli's GitHub data backup.
 
 Run regression checks with `npm test`.
+
+`spotify followed --limit 100000` imports all available followed artists with cursor pagination, preserving IDs. It requires `user-follow-read`; if your older login lacks that scope, run `spotify login` again. Followed artists are an explicit preference signal, separate from Spotify's top-artist rankings.
