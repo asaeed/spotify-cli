@@ -91,3 +91,7 @@ On error: `status: "error"`, `error: {code, message, hint?}`.
 `top --limit N` is the total requested across pages, not the API page size. Use `--limit 100000` to exhaust available rankings. The API is requested in pages of at most 50. Track outputs retain `artists` as names and add `artist_details` with artist IDs for durable identity matching.
 
 `spotify followed [--limit N]` returns all followed artists by default, using cursor pagination and `user-follow-read`.
+
+## Explicit artist preferences
+
+`spotify followed --limit 100000` reads followed artists, not every observed track artist. There is no separate public listener starred-artist or blocked-artist list endpoint. `spotify blocked --file /path/to/YourLibrary.json` reads the `bannedArtists` array from a downloaded Spotify Account data export, offline without login. It outputs `{source: "spotify:account-export", live: false, count, artists: [{id, uri, name}]}` and never changes Spotify or concerts data. Missing fields/unsupported shapes fail instead of implying no blocks. The user's snapshot must be supplied before actual exclusions can be read. Do not upload raw account exports or infer dislikes from absent follows/rankings. The status-before-API rule does not apply to this offline export reader.

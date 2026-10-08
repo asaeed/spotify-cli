@@ -2,6 +2,7 @@
 import { fail } from '../src/envelope.js';
 import * as auth from '../src/commands/auth.js';
 import * as read from '../src/commands/read.js';
+import { cmdBlocked } from '../src/commands/blocked.js';
 import * as write from '../src/commands/write.js';
 
 function parseArgs(argv) {
@@ -40,6 +41,7 @@ Read:
   playlist <id> [--limit N]     Show playlist + tracks
   saved [--limit N]             Saved tracks
   followed [--limit N]          Followed artists (all pages by default)
+  blocked --file PATH          Blocked artists from YourLibrary.json (offline snapshot)
   top <tracks|artists> [--time_range short_term|medium_term|long_term] [--limit N]
   recent [--limit N]            Recently played
   search <query> [--type track|artist|album|playlist] [--limit N(max 10)]
@@ -94,6 +96,7 @@ async function main() {
       case 'playlist': return read.cmdPlaylist(positional[0], flags);
       case 'saved': return read.cmdSaved(flags);
       case 'followed': return read.cmdFollowed(flags);
+      case 'blocked': return await cmdBlocked(flags);
       case 'top': return read.cmdTop(positional[0], flags);
       case 'recent': return read.cmdRecent(flags);
       case 'search': return read.cmdSearch(positional[0], flags);

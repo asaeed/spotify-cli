@@ -105,3 +105,17 @@ Large JSON envelopes finish draining stdout before the CLI exits, so pipe consum
 Run regression checks with `npm test`.
 
 `spotify followed --limit 100000` imports all available followed artists with cursor pagination, preserving IDs. It requires `user-follow-read`; if your older login lacks that scope, run `spotify login` again. Followed artists are an explicit preference signal, separate from Spotify's top-artist rankings.
+
+### Blocked artists and explicit favorites
+
+`spotify followed --limit 100000` reads your explicitly followed artists. There is no separate listener starred-artist endpoint in Spotify's public Web API; do not treat every artist appearing in a track as an explicit favorite.
+
+The public API has no blocked-artist list endpoint. To read a snapshot of your exclusions, request **Account data** from [Spotify's privacy page](https://www.spotify.com/account/privacy/), download it and extract `YourLibrary.json`, then run:
+
+```sh
+spotify blocked --file /path/to/YourLibrary.json
+```
+
+This offline, read-only command requires no login. It returns only `bannedArtists` as `{id, uri, name}` records, plus `source`, `live: false` and `count`; IDs are null when the export only contains a name. It does not modify Spotify or the concert watchlist, store the export, upload it, or expose its other fields. Missing/invalid `bannedArtists` is an error, not an empty block list. An explicit empty array means the snapshot has no blocked artists. This is not continuous sync: changes after the export require a newer download. Actual export formats may vary; the parser accepts name/artist-URI objects and rejects unsupported shapes.
+
+[Spotify's data-download documentation](https://support.spotify.com/us/article/understanding-your-data/) describes account exports. [Spotify support guidance](https://community.spotify.com/forum/en/discussion/6390954/how-to-see-which-artists-are-blocked) identifies `YourLibrary` / `bannedArtists` as the block-list export. Undocumented web-player endpoints are not implemented.
