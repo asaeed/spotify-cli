@@ -2,6 +2,8 @@
 
 A zero-dependency Spotify CLI for use from the terminal or AI coding agents (Claude Code, etc.). Direct Spotify Web API access via local OAuth — no third-party hosts, no SDKs.
 
+**Read more:** [Concert Radar on niltoid.com](https://niltoid.com/blog/concert-radar/).
+
 Runs on Node 20+ (for native `fetch` and Web Crypto). No `node_modules`.
 
 For Concert Radar integration, use the [fresh-machine quickstart](https://github.com/asaeed/concerts-cli/blob/main/docs/quickstart.md). Complete ranking imports are available on `main`.
